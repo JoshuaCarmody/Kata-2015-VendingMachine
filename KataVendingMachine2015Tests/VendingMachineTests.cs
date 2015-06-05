@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using KataVendingMachine2015;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace KataVendingMachine2015Tests
 {
@@ -23,6 +24,15 @@ namespace KataVendingMachine2015Tests
             IEnumerable<Product> result = vm.GetInventory();
 
             Assert.AreNotEqual(null, result);
+        }
+
+        [TestMethod]
+        public void AddProduct_Should_Add_A_Product_To_The_Iventory()
+        {
+            Product product = new Product();
+            vm.AddProduct(product);
+            var result = vm.GetInventory();
+            Assert.IsTrue(result.Contains(product));
         }
 
     }

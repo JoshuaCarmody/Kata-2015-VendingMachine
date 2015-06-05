@@ -8,7 +8,7 @@ namespace KataVendingMachine2015
 {
     public class VendingMachine
     {
-        private IEnumerable<Product> Inventory = new List<Product>();
+        private List<Product> Inventory = new List<Product>();
 
         public VendingMachine()
         {
@@ -16,7 +16,12 @@ namespace KataVendingMachine2015
 
         public IEnumerable<Product> GetInventory()
         {
-            return Inventory;
+            return new List<Product>(Inventory);
+        }
+
+        public void AddProduct(Product product)
+        {
+            Inventory.Add(product);
         }
     }
 }
