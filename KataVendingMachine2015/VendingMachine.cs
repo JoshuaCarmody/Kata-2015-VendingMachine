@@ -9,6 +9,9 @@ namespace KataVendingMachine2015
     public class VendingMachine
     {
         private List<Product> Inventory = new List<Product>();
+        private List<ValuedCoin> CoinBank = new List<ValuedCoin>();
+        private static readonly List<ValuedCoin> AcceptableCoins = new List<ValuedCoin>() { ValuedCoin.Quarter, ValuedCoin.Dime, ValuedCoin.Nickel };
+        private static readonly string CreditMessageFormat = "CREDIT: ${0:0.00}";
 
         public VendingMachine()
         {
@@ -26,7 +29,25 @@ namespace KataVendingMachine2015
 
         public string GetDisplayText()
         {
+            int creditInCents = CoinBank.Sum(c => c.ValueInUsCents);
+            
+            if(creditInCents > 0)
+            {
+                return String.Format(CreditMessageFormat, creditInCents / 100.0);
+            }
+            
             return "Insert Coins";
+        }
+
+        public void InsertCoin(Coin coin)
+        {
+            ValuedCoin valuedCoin = ValuedCoin.FromCoin(coin, AcceptableCoins);
+
+            if(valuedCoin.ValueInUsCents > 0)
+            {
+                CoinBank.Add(valuedCoin);
+                return;
+            }
         }
     }
 }

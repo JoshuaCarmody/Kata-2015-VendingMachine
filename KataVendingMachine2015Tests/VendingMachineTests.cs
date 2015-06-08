@@ -43,5 +43,16 @@ namespace KataVendingMachine2015Tests
             Assert.AreEqual("Insert Coins", result);
         }
 
+        [TestMethod]
+        public void GetDisplayText_Should_Return_0_25_After_Quarter_Inserted()
+        {
+            Coin quarter = new Coin(ValuedCoin.Quarter.DiameterInMms, ValuedCoin.Quarter.WeightInMilligrams);
+
+            vm.InsertCoin(quarter);
+            string result = vm.GetDisplayText();
+
+            Assert.AreEqual("CREDIT: $0.25", result);
+        }
+
     }
 }
