@@ -23,5 +23,10 @@ namespace KataVendingMachine2015
         {
             Inventory.Add(product);
         }
+
+        public string GetDisplayText()
+        {
+            return "Insert Coins";
+        }
     }
 }

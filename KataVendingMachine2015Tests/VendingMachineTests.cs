@@ -35,5 +35,13 @@ namespace KataVendingMachine2015Tests
             Assert.IsTrue(result.Contains(product));
         }
 
+        [TestMethod]
+        public void GetDisplayText_Should_Return_Insert_Coins_If_No_Coins_Inserted()
+        {
+            string result = vm.GetDisplayText();
+
+            Assert.AreEqual("Insert Coins", result);
+        }
+
     }
 }
