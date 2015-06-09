@@ -13,12 +13,14 @@ namespace KataVendingMachine2015
         private readonly List<Coin> ReturnedCoins = new List<Coin>();
         private readonly List<Product> ProductTray = new List<Product>();
         private static readonly List<ValuedCoin> AcceptableCoins = new List<ValuedCoin>() { ValuedCoin.Quarter, ValuedCoin.Dime, ValuedCoin.Nickel };
-        private static readonly string CreditMessageFormat = "CREDIT: ${0:0.00}";
-        private static readonly string PriceMessageFormat = "PRICE: ${0:0.00}";
-        private static readonly string InsertCoinsMessage = "Insert Coins";
+
+        private static readonly string MessageCreditFormat = "CREDIT: ${0:0.00}";
+        private static readonly string MessagePriceFormat = "PRICE: ${0:0.00}";
+        private static readonly string MessageInsertCoins = "INSERT COINS";
+        private static readonly string MessageThankYou = "THANK YOU";
 
         private int CreditInUsCents = 0;
-        private string DisplayText = InsertCoinsMessage;
+        private string DisplayText = MessageInsertCoins;
 
         public VendingMachine()
         {
@@ -36,7 +38,19 @@ namespace KataVendingMachine2015
 
         public string GetDisplayText()
         {
-            return DisplayText;
+            if(String.IsNullOrWhiteSpace(DisplayText))
+            {
+                if (CreditInUsCents > 0)
+                {
+                    return String.Format(MessageCreditFormat, CreditInUsCents / 100.0);
+                }
+                return MessageInsertCoins;
+            }
+
+            string returnValue = DisplayText;
+            DisplayText = String.Empty;
+
+            return returnValue;
         }
 
         public void InsertCoin(Coin coin)
@@ -56,7 +70,7 @@ namespace KataVendingMachine2015
         {
             CreditInUsCents += valuedCoin.ValueInUsCents;
             CoinBank.Add(valuedCoin);
-            DisplayText = String.Format(CreditMessageFormat, CreditInUsCents / 100.0);
+            DisplayText = String.Format(MessageCreditFormat, CreditInUsCents / 100.0);
         }
 
         private void ReturnCoin(Coin coin)
@@ -75,7 +89,7 @@ namespace KataVendingMachine2015
         {
             if(productType.PriceInUsCents > CreditInUsCents)
             {
-                DisplayText = String.Format(PriceMessageFormat, productType.PriceInUsCents / 100.0);
+                DisplayText = String.Format(MessagePriceFormat, productType.PriceInUsCents / 100.0);
                 return;
             }
 
@@ -92,6 +106,7 @@ namespace KataVendingMachine2015
             CreditInUsCents -= foundProduct.ProductType.PriceInUsCents;
             ProductTray.Add(foundProduct);
             Inventory.Remove(foundProduct);
+            DisplayText = MessageThankYou;
         }
 
         public IEnumerable<Product> GetProductsFromTray()

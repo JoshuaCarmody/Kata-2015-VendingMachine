@@ -47,7 +47,7 @@ namespace KataVendingMachine2015Tests
         {
             string result = vm.GetDisplayText();
 
-            Assert.AreEqual("Insert Coins", result);
+            Assert.AreEqual("INSERT COINS", result);
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace KataVendingMachine2015Tests
             vm.InsertCoin(badCoin);
             string result = vm.GetDisplayText();
 
-            Assert.AreEqual("Insert Coins", result);
+            Assert.AreEqual("INSERT COINS", result);
         }
 
         [TestMethod]
@@ -160,6 +160,35 @@ namespace KataVendingMachine2015Tests
             var result = vm.GetDisplayText();
 
             Assert.AreEqual("PRICE: $0.50", result);
+        }
+
+        [TestMethod]
+        public void GetDisplayText_Should_Return_Thank_You_After_A_Purchase()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);                
+            }
+
+            vm.SelectProduct(ProductType.Cola);
+            var result = vm.GetDisplayText();
+
+            Assert.AreEqual("THANK YOU", result);
+        }
+
+        [TestMethod]
+        public void GetDisplayText_Should_Return_Insert_Coins_When_Checked_After_Thank_You()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);
+            }
+
+            vm.SelectProduct(ProductType.Cola);
+            vm.GetDisplayText();
+            var result = vm.GetDisplayText();
+
+            Assert.AreEqual("INSERT COINS", result);
         }
     }
 }
