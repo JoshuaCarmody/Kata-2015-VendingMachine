@@ -190,5 +190,26 @@ namespace KataVendingMachine2015Tests
 
             Assert.AreEqual("INSERT COINS", result);
         }
+
+
+        [TestMethod]
+        public void No_Credit_Should_Be_Left_After_Calling_SelectProduct()
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);
+            }
+
+            vm.SelectProduct(ProductType.Cola);
+            vm.GetDisplayText();
+            var resultText = vm.GetDisplayText();
+
+            Assert.AreEqual("INSERT COINS", resultText);
+
+            vm.SelectProduct(ProductType.Cola);
+            var resultProducts = vm.GetProductsFromTray();
+
+            Assert.AreEqual(1, resultProducts.Count());
+        }
     }
 }

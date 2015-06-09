@@ -107,6 +107,7 @@ namespace KataVendingMachine2015
             ProductTray.Add(foundProduct);
             Inventory.Remove(foundProduct);
             DisplayText = MessageThankYou;
+            CreditInUsCents = 0;
         }
 
         public IEnumerable<Product> GetProductsFromTray()
