@@ -8,5 +8,11 @@ namespace KataVendingMachine2015
 {
     public class Product
     {
+        public ProductType ProductType { get; private set; }
+
+        public Product(ProductType productType)
+        {
+            this.ProductType = productType;
+        }
     }
 }

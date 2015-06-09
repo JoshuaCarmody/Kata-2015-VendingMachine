@@ -29,7 +29,7 @@ namespace KataVendingMachine2015Tests
         [TestMethod]
         public void AddProduct_Should_Add_A_Product_To_The_Iventory()
         {
-            Product product = new Product();
+            Product product = new Product(ProductType.Chips);
             vm.AddProduct(product);
             var result = vm.GetInventory();
             Assert.IsTrue(result.Contains(product));
