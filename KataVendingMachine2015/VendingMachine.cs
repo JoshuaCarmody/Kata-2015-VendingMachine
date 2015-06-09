@@ -18,6 +18,7 @@ namespace KataVendingMachine2015
         private static readonly string MessagePriceFormat = "PRICE: ${0:0.00}";
         private static readonly string MessageInsertCoins = "INSERT COINS";
         private static readonly string MessageThankYou = "THANK YOU";
+        private static readonly string MessageSoldOut = "SOLD OUT";
 
         private int CreditInUsCents = 0;
         private string DisplayText = MessageInsertCoins;
@@ -100,10 +101,13 @@ namespace KataVendingMachine2015
 
             var foundProduct = Inventory.FirstOrDefault(p => p.ProductType == productType);
 
-            if(foundProduct != null)
+            if(foundProduct == null)
             {
-                PurchaseProduct(foundProduct);
+                DisplayText = MessageSoldOut;
+                return;
             }
+
+            PurchaseProduct(foundProduct);
         }
 
         private void PurchaseProduct(Product foundProduct)
@@ -137,7 +141,9 @@ namespace KataVendingMachine2015
 
         public IEnumerable<Product> GetProductsFromTray()
         {
-            return new List<Product>(ProductTray);
+            var returnValue = new List<Product>(ProductTray);
+            ProductTray.RemoveRange(0, ProductTray.Count);
+            return returnValue;
         }
     }
 }

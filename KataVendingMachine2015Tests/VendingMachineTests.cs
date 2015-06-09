@@ -153,6 +153,21 @@ namespace KataVendingMachine2015Tests
             Assert.AreEqual(0, result.Count());
         }
 
+        [TestMethod]
+        public void GetProductsFromTray_Should_Empty_Tray_When_Called()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);
+            }
+
+            vm.SelectProduct(ProductType.Chips);
+            vm.GetProductsFromTray();
+            var result = vm.GetProductsFromTray();
+
+            Assert.AreEqual(0, result.Count());
+        }
+
 
         [TestMethod]
         public void GetDisplayText_Should_Return_Price_0_50_Chips_Selected_With_Insufficient_Credit()
@@ -270,6 +285,53 @@ namespace KataVendingMachine2015Tests
             var result = vm.GetReturnedCoins();
 
             Assert.AreEqual(120, result.Sum(c => (c as ValuedCoin).ValueInUsCents));
+        }
+
+        [TestMethod]
+        public void GetDisplayText_Should_Return_Sold_Out_If_A_Product_Is_Selected_But_No_Inventory_Remains()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    vm.InsertCoin(ValuedCoin.Quarter);
+                }
+                vm.SelectProduct(ProductType.Cola);
+                vm.GetProductsFromTray();
+            }
+
+            for (int j = 0; j < 4; j++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);
+            }
+            vm.SelectProduct(ProductType.Cola);
+            var result = vm.GetDisplayText();
+
+            Assert.AreEqual("SOLD OUT", result);
+        }
+
+
+        [TestMethod]
+        public void GetDisplayText_Should_Not_Dispense_PRoduct_If_A_Product_Is_Selected_But_No_Inventory_Remains()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    vm.InsertCoin(ValuedCoin.Quarter);
+                }
+                vm.SelectProduct(ProductType.Cola);
+                vm.GetProductsFromTray();
+            }
+
+            for (int j = 0; j < 4; j++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);
+            }
+            vm.SelectProduct(ProductType.Cola);
+            var productResult = vm.GetProductsFromTray();
+
+            Assert.AreEqual(0, productResult.Count());
         }
     }
 }
