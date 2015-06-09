@@ -118,17 +118,17 @@ namespace KataVendingMachine2015
 
         public void SelectProduct(ProductType productType)
         {
-            if(productType.PriceInUsCents > CreditInUsCents)
+            var foundProduct = Inventory.FirstOrDefault(p => p.ProductType == productType);
+
+            if (foundProduct == null)
             {
-                DisplayText = String.Format(MessagePriceFormat, productType.PriceInUsCents / 100.0);
+                DisplayText = MessageSoldOut;
                 return;
             }
 
-            var foundProduct = Inventory.FirstOrDefault(p => p.ProductType == productType);
-
-            if(foundProduct == null)
+            if (foundProduct.ProductType.PriceInUsCents > CreditInUsCents)
             {
-                DisplayText = MessageSoldOut;
+                DisplayText = String.Format(MessagePriceFormat, productType.PriceInUsCents / 100.0);
                 return;
             }
 

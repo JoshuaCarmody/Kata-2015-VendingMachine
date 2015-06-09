@@ -292,7 +292,7 @@ namespace KataVendingMachine2015Tests
         }
 
         [TestMethod]
-        public void GetDisplayText_Should_Return_Sold_Out_If_A_Product_Is_Selected_But_No_Inventory_Remains()
+        public void GetDisplayText_Should_Return_Sold_Out_If_A_Product_Is_Selected_And_Enough_Credit_Was_Inserted_But_No_Inventory_Remains()
         {
             for (int i = 0; i < 50; i++)
             {
@@ -314,6 +314,25 @@ namespace KataVendingMachine2015Tests
             Assert.AreEqual("SOLD OUT", result);
         }
 
+
+        [TestMethod]
+        public void GetDisplayText_Should_Return_Sold_Out_If_A_Product_Is_Selected_And_No_Money_Has_Been_Inserted_But_No_Inventory_Remains()
+        {
+            for (int i = 0; i < 50; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    vm.InsertCoin(ValuedCoin.Quarter);
+                }
+                vm.SelectProduct(ProductType.Cola);
+                vm.GetProductsFromTray();
+            }
+
+            vm.SelectProduct(ProductType.Cola);
+            var result = vm.GetDisplayText();
+
+            Assert.AreEqual("SOLD OUT", result);
+        }
 
         [TestMethod]
         public void GetDisplayText_Should_Not_Dispense_PRoduct_If_A_Product_Is_Selected_But_No_Inventory_Remains()
