@@ -17,11 +17,15 @@ namespace KataVendingMachine2015Tests
         {
             vm = new VendingMachine();
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 50; i++)
             {
                 vm.AddProduct(new Product(ProductType.Chips));
                 vm.AddProduct(new Product(ProductType.Candy));
                 vm.AddProduct(new Product(ProductType.Cola));
+            }
+
+            for (int i = 0; i < 20; i++)
+            {
                 vm.AddCoin(ValuedCoin.Quarter);
                 vm.AddCoin(ValuedCoin.Dime);
                 vm.AddCoin(ValuedCoin.Nickel);
@@ -290,7 +294,7 @@ namespace KataVendingMachine2015Tests
         [TestMethod]
         public void GetDisplayText_Should_Return_Sold_Out_If_A_Product_Is_Selected_But_No_Inventory_Remains()
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 50; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
@@ -314,7 +318,7 @@ namespace KataVendingMachine2015Tests
         [TestMethod]
         public void GetDisplayText_Should_Not_Dispense_PRoduct_If_A_Product_Is_Selected_But_No_Inventory_Remains()
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 50; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
@@ -332,6 +336,28 @@ namespace KataVendingMachine2015Tests
             var productResult = vm.GetProductsFromTray();
 
             Assert.AreEqual(0, productResult.Count());
+        }
+
+        [TestMethod]
+        public void GetDisplayText_Should_Return_Exact_Change_Only_When_Making_Change_Is_Not_Guaranteed()
+        {
+            /* There are 20 dimes and 20 nickels in the test vending machine. Putting in $0.75 and 
+             * buying a $0.65 product should completely drain the machine of dimes and nickels
+             * after 40 purchases.*/
+            for(int i = 0; i < 40; i ++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    vm.InsertCoin(ValuedCoin.Quarter);
+                }
+                vm.SelectProduct(ProductType.Candy);
+                vm.GetProductsFromTray();
+                vm.GetDisplayText();
+            }
+
+            var result = vm.GetDisplayText();
+
+            Assert.AreEqual("EXACT CHANGE ONLY", result);
         }
     }
 }

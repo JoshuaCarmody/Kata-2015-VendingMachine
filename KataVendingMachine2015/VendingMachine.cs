@@ -19,6 +19,7 @@ namespace KataVendingMachine2015
         private static readonly string MessageInsertCoins = "INSERT COINS";
         private static readonly string MessageThankYou = "THANK YOU";
         private static readonly string MessageSoldOut = "SOLD OUT";
+        private static readonly string MessageExactChange = "EXACT CHANGE ONLY";
 
         private int CreditInUsCents = 0;
         private string DisplayText = MessageInsertCoins;
@@ -45,6 +46,10 @@ namespace KataVendingMachine2015
                 {
                     return String.Format(MessageCreditFormat, CreditInUsCents / 100.0);
                 }
+                if(!IsGuaranteedToMakeChange())
+                {
+                    return MessageExactChange;
+                }
                 return MessageInsertCoins;
             }
 
@@ -52,6 +57,26 @@ namespace KataVendingMachine2015
             DisplayText = String.Empty;
 
             return returnValue;
+        }
+
+        private bool IsGuaranteedToMakeChange()
+        {
+            // TODO: Make this dynamic, in case we ever want to change the denominations we accept.
+
+            /* Because candy is $0.65, we can never guarantee correct change for 7 dimes 
+             * if we don't have a nickel. */
+            if(!CoinBank.Any(c => c.ValueInUsCents == 5))
+            {
+                return false;
+            }
+            /* The most anyone can overpay without putting in extra coins is $0.20, because the largest
+             * coin we accept is a quarter. If anyone overpays by $0.25 or more, we can just give the
+             * extra coins they inserted back to them. */
+            if(CoinBank.Where(c => c.ValueInUsCents <= 10).Sum(c => c.ValueInUsCents) < 20)
+            {
+                return false;
+            }
+            return true;
         }
 
         public void InsertCoin(Coin coin)
