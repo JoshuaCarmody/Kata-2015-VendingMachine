@@ -22,6 +22,9 @@ namespace KataVendingMachine2015Tests
                 vm.AddProduct(new Product(ProductType.Chips));
                 vm.AddProduct(new Product(ProductType.Candy));
                 vm.AddProduct(new Product(ProductType.Cola));
+                vm.AddCoin(ValuedCoin.Quarter);
+                vm.AddCoin(ValuedCoin.Dime);
+                vm.AddCoin(ValuedCoin.Nickel);
             }
         }
 
@@ -191,7 +194,6 @@ namespace KataVendingMachine2015Tests
             Assert.AreEqual("INSERT COINS", result);
         }
 
-
         [TestMethod]
         public void No_Credit_Should_Be_Left_After_Calling_SelectProduct()
         {
@@ -210,6 +212,20 @@ namespace KataVendingMachine2015Tests
             var resultProducts = vm.GetProductsFromTray();
 
             Assert.AreEqual(1, resultProducts.Count());
+        }
+
+        [TestMethod]
+        public void VendingMachine_Should_Return_25_Cents_When_5_Quarters_Are_Inserted_And_Cola_Is_Purchased()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);
+            }
+
+            vm.SelectProduct(ProductType.Cola);
+            var result = vm.GetReturnedCoins();
+
+            Assert.AreEqual(25, result.Sum(c => (c as ValuedCoin).ValueInUsCents));
         }
     }
 }

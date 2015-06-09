@@ -69,8 +69,13 @@ namespace KataVendingMachine2015
         private void BankCoin(ValuedCoin valuedCoin)
         {
             CreditInUsCents += valuedCoin.ValueInUsCents;
-            CoinBank.Add(valuedCoin);
+            AddCoin(valuedCoin);
             DisplayText = String.Format(MessageCreditFormat, CreditInUsCents / 100.0);
+        }
+
+        public void AddCoin(ValuedCoin valuedCoin)
+        {
+            CoinBank.Add(valuedCoin);
         }
 
         private void ReturnCoin(Coin coin)
@@ -107,7 +112,26 @@ namespace KataVendingMachine2015
             ProductTray.Add(foundProduct);
             Inventory.Remove(foundProduct);
             DisplayText = MessageThankYou;
+            MakeChange();
+        }
+
+        public void MakeChange()
+        {
+            MakeChange(25);
+            MakeChange(10);
+            MakeChange(5);
             CreditInUsCents = 0;
+        }
+
+        private void MakeChange(int coinValue)
+        {
+            while (CreditInUsCents >= coinValue && CoinBank.Any(c => c.ValueInUsCents == coinValue))
+            {
+                var returnCoin = CoinBank.FirstOrDefault(c => c.ValueInUsCents == coinValue);
+                CoinBank.Remove(returnCoin);
+                ReturnCoin(returnCoin);
+                CreditInUsCents -= coinValue;
+            }
         }
 
         public IEnumerable<Product> GetProductsFromTray()
