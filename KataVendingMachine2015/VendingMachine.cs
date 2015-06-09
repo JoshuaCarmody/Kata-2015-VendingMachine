@@ -14,8 +14,11 @@ namespace KataVendingMachine2015
         private readonly List<Product> ProductTray = new List<Product>();
         private static readonly List<ValuedCoin> AcceptableCoins = new List<ValuedCoin>() { ValuedCoin.Quarter, ValuedCoin.Dime, ValuedCoin.Nickel };
         private static readonly string CreditMessageFormat = "CREDIT: ${0:0.00}";
+        private static readonly string PriceMessageFormat = "PRICE: ${0:0.00}";
+        private static readonly string InsertCoinsMessage = "Insert Coins";
 
         private int CreditInUsCents = 0;
+        private string DisplayText = InsertCoinsMessage;
 
         public VendingMachine()
         {
@@ -33,12 +36,7 @@ namespace KataVendingMachine2015
 
         public string GetDisplayText()
         {
-            if (CreditInUsCents > 0)
-            {
-                return String.Format(CreditMessageFormat, CreditInUsCents / 100.0);
-            }
-            
-            return "Insert Coins";
+            return DisplayText;
         }
 
         public void InsertCoin(Coin coin)
@@ -47,7 +45,6 @@ namespace KataVendingMachine2015
 
             if(valuedCoin.ValueInUsCents > 0)
             {
-                CreditInUsCents += valuedCoin.ValueInUsCents;
                 BankCoin(valuedCoin);
                 return;
             }
@@ -57,7 +54,9 @@ namespace KataVendingMachine2015
 
         private void BankCoin(ValuedCoin valuedCoin)
         {
+            CreditInUsCents += valuedCoin.ValueInUsCents;
             CoinBank.Add(valuedCoin);
+            DisplayText = String.Format(CreditMessageFormat, CreditInUsCents / 100.0);
         }
 
         private void ReturnCoin(Coin coin)
@@ -76,6 +75,7 @@ namespace KataVendingMachine2015
         {
             if(productType.PriceInUsCents > CreditInUsCents)
             {
+                DisplayText = String.Format(PriceMessageFormat, productType.PriceInUsCents / 100.0);
                 return;
             }
 

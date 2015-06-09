@@ -134,5 +134,17 @@ namespace KataVendingMachine2015Tests
             Assert.IsFalse(result.Any(p => p.ProductType == ProductType.Chips));
             Assert.AreEqual(0, result.Count());
         }
+
+
+        [TestMethod]
+        public void GetDisplayText_Should_Return_Price_0_50_Chips_Selected_With_Insufficient_Credit()
+        {
+            vm.InsertCoin(ValuedCoin.Quarter);
+
+            vm.SelectProduct(ProductType.Chips);
+            var result = vm.GetDisplayText();
+
+            Assert.AreEqual("PRICE: $0.50", result);
+        }
     }
 }
