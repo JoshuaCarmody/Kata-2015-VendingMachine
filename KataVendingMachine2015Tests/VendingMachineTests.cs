@@ -255,5 +255,21 @@ namespace KataVendingMachine2015Tests
 
             Assert.AreEqual(5, result.Sum(c => (c as ValuedCoin).ValueInUsCents));
         }
+
+        [TestMethod]
+        public void VendingMachine_Should_Return_Same_Value_In_Coins_When_MakeChange_Is_Called_And_Nothing_Has_Been_Purchased()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);
+                vm.InsertCoin(ValuedCoin.Dime);
+                vm.InsertCoin(ValuedCoin.Nickel);
+            }
+
+            vm.MakeChange();
+            var result = vm.GetReturnedCoins();
+
+            Assert.AreEqual(120, result.Sum(c => (c as ValuedCoin).ValueInUsCents));
+        }
     }
 }
