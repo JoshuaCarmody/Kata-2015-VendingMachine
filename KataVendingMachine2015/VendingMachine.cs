@@ -74,6 +74,11 @@ namespace KataVendingMachine2015
 
         public void SelectProduct(ProductType productType)
         {
+            if(productType.PriceInUsCents > CreditInUsCents)
+            {
+                return;
+            }
+
             var foundProduct = Inventory.FirstOrDefault(p => p.ProductType == productType);
 
             if(foundProduct != null)

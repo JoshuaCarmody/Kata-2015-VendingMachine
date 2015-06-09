@@ -122,5 +122,17 @@ namespace KataVendingMachine2015Tests
             Assert.IsTrue(result.Any(p => p.ProductType == ProductType.Chips));
             Assert.AreEqual(1, result.Count());
         }
+
+        [TestMethod]
+        public void SelectProduct_Should_Not_Dispense_Chips_Given_Chips_When_Insufficient_Money_Is_Inserted()
+        {
+            vm.InsertCoin(ValuedCoin.Quarter);
+
+            vm.SelectProduct(ProductType.Chips);
+            var result = vm.GetProductsFromTray();
+
+            Assert.IsFalse(result.Any(p => p.ProductType == ProductType.Chips));
+            Assert.AreEqual(0, result.Count());
+        }
     }
 }
