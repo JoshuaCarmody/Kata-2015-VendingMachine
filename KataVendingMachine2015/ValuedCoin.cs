@@ -27,6 +27,15 @@ namespace KataVendingMachine2015
 
         public static ValuedCoin FromCoin(Coin coin, IEnumerable<ValuedCoin> acceptableCoins)
         {
+            if(coin == null)
+            {
+                throw new ArgumentNullException("Parameter coin was null in ValuedCoin.FromCoin");
+            }
+            if (acceptableCoins == null)
+            {
+                throw new ArgumentNullException("Parameter acceptableCoins was null in ValuedCoin.FromCoin");
+            }
+
             int valueInCents = 0;
 
             foreach(var acceptableCoin in acceptableCoins)

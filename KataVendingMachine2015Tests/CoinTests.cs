@@ -94,5 +94,40 @@ namespace KataVendingMachine2015Tests
 
             Assert.AreEqual(0, result.ValueInUsCents);
         }
+
+        [TestMethod]
+        public void ValuedCoin_FromCoin_Should_Throw_ArgumentNullException_Given_Null_As_First_Argument()
+        {
+            Exception result = null;
+
+            try
+            {
+                ValuedCoin.FromCoin(null, new List<ValuedCoin> { ValuedCoin.Nickel, ValuedCoin.Dime, ValuedCoin.Quarter });
+            }
+            catch(ArgumentNullException e)
+            {
+                result = e;
+            }
+
+            Assert.AreNotEqual(null, result);
+        }
+
+
+        [TestMethod]
+        public void ValuedCoin_FromCoin_Should_Throw_ArgumentNullException_Given_Null_As_Second_Argument()
+        {
+            Exception result = null;
+
+            try
+            {
+                ValuedCoin.FromCoin(new Coin(50, 50), null);
+            }
+            catch (ArgumentNullException e)
+            {
+                result = e;
+            }
+
+            Assert.AreNotEqual(null, result);
+        }
     }
 }
