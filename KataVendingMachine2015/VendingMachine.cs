@@ -83,12 +83,13 @@ namespace KataVendingMachine2015
 
             if(foundProduct != null)
             {
-                DispenseProduct(foundProduct);
+                PurchaseProduct(foundProduct);
             }
         }
 
-        private void DispenseProduct(Product foundProduct)
+        private void PurchaseProduct(Product foundProduct)
         {
+            CreditInUsCents -= foundProduct.ProductType.PriceInUsCents;
             ProductTray.Add(foundProduct);
             Inventory.Remove(foundProduct);
         }

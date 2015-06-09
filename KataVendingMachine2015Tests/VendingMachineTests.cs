@@ -124,6 +124,21 @@ namespace KataVendingMachine2015Tests
         }
 
         [TestMethod]
+        public void SelectProduct_Should_Not_Dispense_2_Chips_If_User_Only_Paid_For_One()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);
+            }
+
+            vm.SelectProduct(ProductType.Chips);
+            vm.SelectProduct(ProductType.Chips);
+            var result = vm.GetProductsFromTray();
+
+            Assert.AreEqual(1, result.Count());
+        }
+
+        [TestMethod]
         public void SelectProduct_Should_Not_Dispense_Chips_Given_Chips_When_Insufficient_Money_Is_Inserted()
         {
             vm.InsertCoin(ValuedCoin.Quarter);
