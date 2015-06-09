@@ -78,5 +78,27 @@ namespace KataVendingMachine2015Tests
             Assert.AreEqual("Insert Coins", result);
         }
 
+        [TestMethod]
+        public void GetReturnedCoins_Should_Contain_The_Inserted_Coin_After_Bad_Coin_Inserted()
+        {
+            Coin fakeQuarter = new Coin(ValuedCoin.Quarter.DiameterInMms, ValuedCoin.Quarter.WeightInMilligrams - 1000);
+
+            vm.InsertCoin(fakeQuarter);
+            var result = vm.GetReturnedCoins();
+
+            Assert.IsTrue(result.Contains(fakeQuarter));
+        }
+
+        [TestMethod]
+        public void GetReturnedCoins_Should_Return_An_Empty_List_After_Being_Called_Once()
+        {
+            Coin fakeQuarter = new Coin(ValuedCoin.Quarter.DiameterInMms, ValuedCoin.Quarter.WeightInMilligrams - 1000);
+
+            vm.InsertCoin(fakeQuarter);
+            vm.GetReturnedCoins();
+            var result = vm.GetReturnedCoins();
+
+            Assert.AreEqual(0, result.Count());
+        }
     }
 }
