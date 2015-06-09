@@ -16,6 +16,13 @@ namespace KataVendingMachine2015Tests
         public void Init()
         {
             vm = new VendingMachine();
+
+            for (int i = 0; i < 20; i++)
+            {
+                vm.AddProduct(new Product(ProductType.Chips));
+                vm.AddProduct(new Product(ProductType.Candy));
+                vm.AddProduct(new Product(ProductType.Cola));
+            }
         }
 
         [TestMethod]
@@ -99,6 +106,21 @@ namespace KataVendingMachine2015Tests
             var result = vm.GetReturnedCoins();
 
             Assert.AreEqual(0, result.Count());
+        }
+
+        [TestMethod]
+        public void SelectProduct_Should_Dispense_Chips_Given_Chips_When_Enough_Money_Is_Inserted()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);
+            }
+
+            vm.SelectProduct(ProductType.Chips);
+            var result = vm.GetProductsFromTray();
+
+            Assert.IsTrue(result.Any(p => p.ProductType == ProductType.Chips));
+            Assert.AreEqual(1, result.Count());
         }
     }
 }

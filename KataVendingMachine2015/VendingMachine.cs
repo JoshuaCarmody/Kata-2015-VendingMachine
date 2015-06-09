@@ -11,8 +11,11 @@ namespace KataVendingMachine2015
         private readonly List<Product> Inventory = new List<Product>();
         private readonly List<ValuedCoin> CoinBank = new List<ValuedCoin>();
         private readonly List<Coin> ReturnedCoins = new List<Coin>();
+        private readonly List<Product> ProductTray = new List<Product>();
         private static readonly List<ValuedCoin> AcceptableCoins = new List<ValuedCoin>() { ValuedCoin.Quarter, ValuedCoin.Dime, ValuedCoin.Nickel };
         private static readonly string CreditMessageFormat = "CREDIT: ${0:0.00}";
+
+        private int CreditInUsCents = 0;
 
         public VendingMachine()
         {
@@ -30,11 +33,9 @@ namespace KataVendingMachine2015
 
         public string GetDisplayText()
         {
-            int creditInCents = CoinBank.Sum(c => c.ValueInUsCents);
-            
-            if(creditInCents > 0)
+            if (CreditInUsCents > 0)
             {
-                return String.Format(CreditMessageFormat, creditInCents / 100.0);
+                return String.Format(CreditMessageFormat, CreditInUsCents / 100.0);
             }
             
             return "Insert Coins";
@@ -46,6 +47,7 @@ namespace KataVendingMachine2015
 
             if(valuedCoin.ValueInUsCents > 0)
             {
+                CreditInUsCents += valuedCoin.ValueInUsCents;
                 BankCoin(valuedCoin);
                 return;
             }
@@ -68,6 +70,27 @@ namespace KataVendingMachine2015
             var returnValue = new List<Coin>(ReturnedCoins);
             ReturnedCoins.RemoveRange(0, ReturnedCoins.Count);
             return returnValue;
+        }
+
+        public void SelectProduct(ProductType productType)
+        {
+            var foundProduct = Inventory.FirstOrDefault(p => p.ProductType == productType);
+
+            if(foundProduct != null)
+            {
+                DispenseProduct(foundProduct);
+            }
+        }
+
+        private void DispenseProduct(Product foundProduct)
+        {
+            ProductTray.Add(foundProduct);
+            Inventory.Remove(foundProduct);
+        }
+
+        public IEnumerable<Product> GetProductsFromTray()
+        {
+            return new List<Product>(ProductTray);
         }
     }
 }
