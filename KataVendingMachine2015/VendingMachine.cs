@@ -125,6 +125,7 @@ namespace KataVendingMachine2015
 
         private void MakeChange(int coinValue)
         {
+            // TODO: This extra searching is inefficient. Should combined .Any and .FirstOrDefault checks. And probably each coin type should have its own bank.            
             while (CreditInUsCents >= coinValue && CoinBank.Any(c => c.ValueInUsCents == coinValue))
             {
                 var returnCoin = CoinBank.FirstOrDefault(c => c.ValueInUsCents == coinValue);

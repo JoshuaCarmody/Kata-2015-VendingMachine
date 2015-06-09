@@ -227,5 +227,33 @@ namespace KataVendingMachine2015Tests
 
             Assert.AreEqual(25, result.Sum(c => (c as ValuedCoin).ValueInUsCents));
         }
+
+        [TestMethod]
+        public void VendingMachine_Should_Return_10_Cents_When_3_Quarters_Are_Inserted_And_Candy_Is_Purchased()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                vm.InsertCoin(ValuedCoin.Quarter);
+            }
+
+            vm.SelectProduct(ProductType.Candy);
+            var result = vm.GetReturnedCoins();
+
+            Assert.AreEqual(10, result.Sum(c => (c as ValuedCoin).ValueInUsCents));
+        }
+
+        [TestMethod]
+        public void VendingMachine_Should_Return_5_Cents_When_11_Nickels_Are_Inserted_And_Chips_Are_Purchased()
+        {
+            for (int i = 0; i < 11; i++)
+            {
+                vm.InsertCoin(ValuedCoin.Nickel);
+            }
+
+            vm.SelectProduct(ProductType.Chips);
+            var result = vm.GetReturnedCoins();
+
+            Assert.AreEqual(5, result.Sum(c => (c as ValuedCoin).ValueInUsCents));
+        }
     }
 }
